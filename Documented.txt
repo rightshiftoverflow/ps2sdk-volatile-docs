@@ -1,5 +1,5 @@
 partial:
-	...
+	/ee/kernel/include/sifcmd.h
 
 complete:
 	/ee/kernel/include/sifrpc.h

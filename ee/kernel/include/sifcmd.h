@@ -45,7 +45,7 @@ typedef struct t_SifCmdHeader
 #define SIF_CMD_RPC_CALL	(SIF_CMD_ID_SYSTEM | 10)
 #define SIF_CMD_RPC_RDATA	(SIF_CMD_ID_SYSTEM | 12)
 
-/** System SREG */
+/** System software register (SREG) */
 #define SIF_SREG_RPCINIT	0
 
 /** Structure for remotely (over the SIF) changing the value of a software register (SREG).
@@ -82,15 +82,37 @@ typedef struct _iop_reset_pkt {
 extern "C" {
 #endif
 
-unsigned int SifSendCmd(int cmd, void *packet, int packet_size, void *src_extra,
-	void *dest_extra, int size_extra);
+/**
+ *	Send a raw packet over the SIF.
+ *	@param 	cmd function number of the function to call
+ *	@param 	packet pointer to the packet structure
+ *	@param 	packet_size size of the packet structure
+ *	@param 	src_extra source data?
+ *	@param 	dest_extra destination data?
+ *	@param 	size_extra if 0, only send a ping, othersize send with data
+ *	@return unknown, result of SifSetDma(dmat, count) or iSifSetDma(dmat, count)
+ */
+unsigned int SifSendCmd(int cmd, void *packet, int packet_size, void *src_extra, 
+						void *dest_extra, int size_extra);
+
 unsigned int iSifSendCmd(int cmd, void *packet, int packet_size, void *src_extra,
-	void *dest_extra, int size_extra);
+						 void *dest_extra, int size_extra);
+
 void SifAddCmdHandler(int pos, SifCmdHandler_t handler, void *harg);
+
 void SifRemoveCmdHandler(int pos);
+
 void SifInitCmd(void);
+
 void SifExitCmd(void);
+
 SifCmdHandlerData_t *SifSetCmdBuffer(SifCmdHandlerData_t *db, int size);
+
+/**
+ *	Returns the value of the specified software register
+ *	@param 	index register number
+ *	@return contents of SREG[index]
+ */
 int SifGetSreg(int index);
 
 void SifWriteBackDCache(void *ptr, int size);	//EE only
