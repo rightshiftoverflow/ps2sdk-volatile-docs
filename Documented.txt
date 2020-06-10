@@ -1,5 +1,5 @@
 partial:
-	sifrpc.h
+	/ee/kernel/include/sifrpc.h
 
 complete:
 	(none) :[
