@@ -1,5 +1,8 @@
 partial:
-	/ee/kernel/include/sifcmd.h
 
-complete:
+complete (documentation done but not 100% known to be correct):
+	/ee/kernel/include/sifcmd.h
 	/ee/kernel/include/sifrpc.h
+
+published (known 100% correct):
+	[none] :[
