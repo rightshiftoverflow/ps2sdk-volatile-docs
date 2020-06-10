@@ -10,8 +10,9 @@
 */
 
 /**
- * @file
- * EE SIF RPC commands prototypes
+ *	@file
+ *	EE SIF RPC commands handling. Use CMD for a lower-level implementation.
+ *	@see {@link /ee/kernel/include/sifcmd.h sifcmd.h}
  */
 
 #ifndef __SIFRPC_H__
@@ -243,7 +244,7 @@ void SifExitRpc(void);
  *			should be renamed to "sid" to avoid confusion)
  *	@param 	mode mode of operation the packet should recieve. Current supported
  *			values are 0x0, {@link SIF_RPC_M_NOWAIT}, and {@link SIF_RPC_M_NOWBDC}.
- *	@return 0 if successful; -{@link E_SIF_PKT_ALLOC}, -{@link -E_SIF_PKT_SEND}, or 
+ *	@return 0 if successful; -{@link E_SIF_PKT_ALLOC}, -{@link E_SIF_PKT_SEND}, or 
  *			-{@link E_LIB_SEMA_CREATE} on error.
  */
 int SifBindRpc(SifRpcClientData_t *client, int rpc_number, int mode);
