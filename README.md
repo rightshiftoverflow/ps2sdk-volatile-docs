@@ -2,13 +2,12 @@
 Trying to document individual functions to help new programmers at the SDK (like myself) not to be super confused.
 To view the documentation, run doxygen and go to docs/html/index.html.  
 
+NOTE: This fork is not buildable! This fork is designed to only act as a reference for documentation.
+
 Official [PS2SDK Documentation](https://ps2dev.github.io/ps2sdk/) (not very in-depth)
 Unoffical [AKuHAK's Documentation](https://akuhak.github.io/ps2sdk-doxy/index.html) (info on abstracts and terminology)
 
 # PS2SDK - PS2DEV Open Source Project.
-
-[![CI](https://github.com/ps2dev/ps2sdk/workflows/CI/badge.svg)](https://github.com/ps2dev/ps2sdk/actions?query=workflow%3ACI)
-[![CI-Docker](https://github.com/ps2dev/ps2sdk/workflows/CI-Docker/badge.svg)](https://github.com/ps2dev/ps2sdk/actions?query=workflow%3ACI-Docker)
 
 Copyright 2001-2004, ps2dev - http://www.ps2dev.org  
 All rights reserved.
