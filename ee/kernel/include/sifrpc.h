@@ -252,7 +252,7 @@ int SifBindRpc(SifRpcClientData_t *client, int rpc_number, int mode);
  *	<sub>SIF RPC client API</sub><br/>
  *	Call on a Remote Rocedure Call. Get information from the IOP.
  *	@param 	client pointer to "client context" created by {@link SifBindRpc()}.
- *	@param 	rpc_number special call number for the call(??).
+ *	@param 	rpc_number unique call identifier for the call
  *	@param 	mode mode of operation the packet should recieve. Current supported
  *			values are 0x0, {@link SIF_RPC_M_NOWAIT}, and {@link SIF_RPC_M_NOWBDC}.
  *	@param 	send pointer to the data to send with the call
@@ -271,7 +271,7 @@ int SifCallRpc(SifRpcClientData_t *client, int rpc_number, int mode, void *send,
 
 /**
  *	<sub>SIF RPC client API</sub><br/>
- *	Generic call to the IOP for data.
+ *	Generic call to the server for data.
  *	@param 	rd pointer to a {@link SifRpcReceiveData} that contains
  *			the information for the call
  *	@param 	src unused. Use rd->src instead. (TODO: remove unused argument)
@@ -297,7 +297,7 @@ int SifCheckStatRpc(SifRpcClientData_t *cd);
 /* SIF RPC server API */
 /**
  *	<sub>SIF RPC server API</sub><br/>
- *	Add an action to the Remote Procedure Call Queue.
+ *	Manually add an action to the Remote Procedure Call Queue.
  *	@param 	q pointer to data that specifies the queue information
  *	@param 	thread_id id to set to the data's thread_id. q->thread_id = thread_id.
  *			(TODO: kinda useless argument... let the user do this manually)
@@ -358,7 +358,7 @@ void SifExecRequest(SifRpcServerData_t *srv);
 /**
  *	<sub>SIF RPC server API</sub><br/>
  *	Start a basic RPC server with a queue. Consistantly recurses the queue for
- *	RPC Calls and executes them when necissary. Useful for almost all applications.
+ *	RPC Calls and executes them when necessary. Useful for almost all applications.
  *	@param 	q queue to maintain
  */
 void SifRpcLoop(SifRpcDataQueue_t *q);
