@@ -1,9 +1,12 @@
+# PS2SK Volatile Docs
+Trying to document individual functions to help new programmers who use the library not to be confused. (Like myself) 
+To view the documentation, go to docs/html/index.html.  
+Official [PS2SDK Documentation](https://ps2dev.github.io/ps2sdk/) (not very in-depth)
+
 # PS2SDK - PS2DEV Open Source Project.
 
 [![CI](https://github.com/ps2dev/ps2sdk/workflows/CI/badge.svg)](https://github.com/ps2dev/ps2sdk/actions?query=workflow%3ACI)
 [![CI-Docker](https://github.com/ps2dev/ps2sdk/workflows/CI-Docker/badge.svg)](https://github.com/ps2dev/ps2sdk/actions?query=workflow%3ACI-Docker)
-
-[PS2SDK Documentation](https://ps2dev.github.io/ps2sdk/)
 
 Copyright 2001-2004, ps2dev - http://www.ps2dev.org  
 All rights reserved.
