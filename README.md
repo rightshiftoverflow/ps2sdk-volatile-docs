@@ -1,6 +1,6 @@
 # PS2SK Volatile Docs
 Trying to document individual functions to help new programmers who use the library not to be confused. (Like myself) 
-To view the documentation, go to docs/html/index.html.  
+To view the documentation, run doxygen and go to docs/html/index.html.  
 Official [PS2SDK Documentation](https://ps2dev.github.io/ps2sdk/) (not very in-depth)
 
 # PS2SDK - PS2DEV Open Source Project.
