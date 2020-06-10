@@ -42,13 +42,17 @@ enum _sif_regs {
 };
 
 //Status bits for the SM and MS SIF registers
-/** SIF initialized */
+/** SIF status SIF did initialize */
 #define SIF_STAT_SIFINIT	0x10000
-/** SIFCMD initialized */
+/** SIF status command handlers did initialize */
 #define SIF_STAT_CMDINIT	0x20000
-/** Bootup completed */
+/** SIF status bootup completed */
 #define SIF_STAT_BOOTEND	0x40000
 
+/**
+ *	Data structure to organize source and destination data, along with
+ *	it's size and attributes.
+ */
 typedef struct t_SifDmaTransfer
 {
    void				*src,
@@ -61,7 +65,17 @@ typedef struct t_SifDmaTransfer
 extern "C" {
 #endif
 
+/**
+ *	Put a packet on the DMA
+ *	@param 	sdd packet transfer structure to add to the DMA
+ *	@param 	len length of the packet
+ */
 u32 SifSetDma(SifDmaTransfer_t *sdd, s32 len);
+
+/**
+ *	Get the status of the DMA
+ *	@param id ??? (can't find where this is implemented in source!)
+ */
 s32 SifDmaStat(u32 id);
 
 #ifdef __cplusplus

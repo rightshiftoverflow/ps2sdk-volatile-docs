@@ -1,5 +1,6 @@
 partial:
-
+	/ee/kernel/include/sifdma.h
+	
 complete (documentation done but not 100% known to be correct):
 	/ee/kernel/include/sifcmd.h
 	/ee/kernel/include/sifrpc.h
