@@ -38,6 +38,9 @@
 extern "C" {
 #endif
 
+/**
+ *	Used as the server callback function when an RPC is called?
+ */
 typedef void * (*SifRpcFunc_t)(int fno, void *buffer, int length);
 /**
  *	Used with {@link SifCallRpc()} as a completion handler
@@ -59,7 +62,11 @@ typedef struct t_SifRpcPktHeader {
 } SifRpcPktHeader_t;
 
 /**
- *	Render Packet?
+ *	Rendered Packet
+ *	Organizes the data returned to the client.
+ *	Created when calling {@link SifExecRequest()}. 
+ *	This is a local struct and does not to to be
+ *	created or accessed by the user.
  */
 typedef struct t_SifRpcRendPkt
 {
@@ -76,7 +83,10 @@ typedef struct t_SifRpcRendPkt
 } SifRpcRendPkt_t;
 
 /**
- *	Miscellaneous data packet for general purpose
+ *	Generic packet.
+ *	Created when calling {@link SifRpcGetOtherData()}. 
+ *	This is a local struct and does not to to be
+ *	created or accessed by the user.
  */
 typedef struct t_SifRpcOtherDataPkt
 {
@@ -93,9 +103,9 @@ typedef struct t_SifRpcOtherDataPkt
 
 /**
  *	Bind packet.
- *	Created when calling SifBindRpc(). This is a 
- *	local struct and does not to to be created or
- *	accessed by the user.
+ *	Created when calling {@link SifBindRpc()}. This 
+ *	is a local struct and does not to to be created
+ *	or accessed by the user.
  */
 typedef struct t_SifRpcBindPkt
 {
@@ -109,9 +119,9 @@ typedef struct t_SifRpcBindPkt
 
 /**
  *	Call packet.
- *	Created when calling SifCallRpc(). This is a 
- *	local struct and does not to to be created or
- *	accessed by the user.
+ *	Created when calling {@link SifCallRpc()}. This
+ *	is a local struct and does not to to be created
+ *	or accessed by the user.
  */
 typedef struct t_SifRpcCallPkt
 {
@@ -129,7 +139,7 @@ typedef struct t_SifRpcCallPkt
 } SifRpcCallPkt_t;
 
 /**
- *	SIF server data, used to identify the server
+ *	SIF server context
  */
 typedef struct t_SifRpcServerData
 {
@@ -157,7 +167,9 @@ typedef struct t_SifRpcServerData
    struct t_SifRpcDataQueue	*base;		/* 20	16 */
 } SifRpcServerData_t;
 
-
+/**
+ *	Header for data
+ */
 typedef struct t_SifRpcHeader
 {
    void				*pkt_addr;	/* 04	00 */
@@ -166,7 +178,9 @@ typedef struct t_SifRpcHeader
    u32			 	mode;		/* 07	03 */
 } SifRpcHeader_t;
 
-
+/**
+ *	SIF client context
+ */
 typedef struct t_SifRpcClientData
 {
    struct t_SifRpcHeader	hdr;
@@ -178,6 +192,10 @@ typedef struct t_SifRpcClientData
    struct t_SifRpcServerData	*server;	/* 09 	13 */
 } SifRpcClientData_t;
 
+/**
+ *	Generic data
+ *	@see {@link SifRpcGetOtherData()}
+ */
 typedef struct t_SifRpcReceiveData
 {
    struct t_SifRpcHeader	hdr;
@@ -186,6 +204,9 @@ typedef struct t_SifRpcReceiveData
    int	                        size;		/* 06 */
 } SifRpcReceiveData_t;
 
+/**
+ *	Queue data
+ */
 typedef struct t_SifRpcDataQueue
 {
    int				thread_id,	/* 00 */
@@ -280,21 +301,66 @@ int SifCheckStatRpc(SifRpcClientData_t *cd);
  *	@param 	q pointer to data that specifies the queue information
  *	@param 	thread_id id to set to the data's thread_id. q->thread_id = thread_id.
  *			(TODO: kinda useless argument... let the user do this manually)
- *	@return 
+ *	@return the currently active queue
  */
 SifRpcDataQueue_t *SifSetRpcQueue(SifRpcDataQueue_t *q, int thread_id);
 
+/**
+ *	<sub>SIF RPC server API</sub><br/>
+ *	Delete an action on the Remote Procedure Call Queue.
+ *	@param 	q pointer to data that specifies the queue information
+ *	@return the currently active queue
+ */
 SifRpcDataQueue_t *SifRemoveRpcQueue(SifRpcDataQueue_t *qd);
 
+/**
+ *	<sub>SIF RPC server API</sub><br/>
+ *	Register a Remote Procedure Call for a client to bind to.
+ *	@param 	srv a pointer to the "server context" to create and return to the user.
+ *	@param 	sid the unique sid that a client uses to identify the call
+ *	@param 	func callback function for when the RPC is recieved by the server?
+ *	@param 	buff data recieved as a result of the call?
+ *	@param 	cfunc callback function for sending back data to the client?
+ *	@param 	cbuff data to be sent?
+ *	@param 	qd quue data inrelation to the RPC call
+ *	@return the last server instance?
+ */
 SifRpcServerData_t *SifRegisterRpc(SifRpcServerData_t *srv, int sid, SifRpcFunc_t func, 
 								   void *buff, SifRpcFunc_t cfunc, void *cbuff, 
 								   SifRpcDataQueue_t *qd);
 
+/**
+ *	<sub>SIF RPC server API</sub><br/>
+ *	Remove a registered Remote Procedure Call.
+ *	@param 	sd the "server context" to remove
+ *	@param 	queue the queue related to the "server context"
+ *	@return the last server instance?
+ */
 SifRpcServerData_t *SifRemoveRpc(SifRpcServerData_t *sd, SifRpcDataQueue_t *queue);
 
+/**
+ *	<sub>SIF RPC server API</sub><br/>
+ *	Returns the next RPC call or generic request and sets if the queue is
+ *	active depending on if there are items in the queue.
+ *	@param 	qd queue to get next instance from
+ *	@return the next queue instance
+ */
 SifRpcServerData_t *SifGetNextRequest(SifRpcDataQueue_t *qd);
 
+/**
+ *	<sub>SIF RPC server API</sub><br/>
+ *	Processes input information for the RPC Call and sends back computed
+ *	results
+ *	@param 	srv the RPC server instance that recieved the Call
+ */
 void SifExecRequest(SifRpcServerData_t *srv);
+
+/**
+ *	<sub>SIF RPC server API</sub><br/>
+ *	Start a basic RPC server with a queue. Consistantly recurses the queue for
+ *	RPC Calls and executes them when necissary. Useful for almost all applications.
+ *	@param 	q queue to maintain
+ */
 void SifRpcLoop(SifRpcDataQueue_t *q);
 
 #ifdef __cplusplus
