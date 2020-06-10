@@ -1,7 +1,9 @@
 # PS2SK Volatile Docs
-Trying to document individual functions to help new programmers who use the library not to be confused. (Like myself) 
+Trying to document individual functions to help new programmers at the SDK (like myself) not to be super confused.
 To view the documentation, run doxygen and go to docs/html/index.html.  
+
 Official [PS2SDK Documentation](https://ps2dev.github.io/ps2sdk/) (not very in-depth)
+Unoffical [AKuHAK's Documentation](https://akuhak.github.io/ps2sdk-doxy/index.html) (info on abstracts and terminology)
 
 # PS2SDK - PS2DEV Open Source Project.
 
@@ -13,7 +15,7 @@ All rights reserved.
 
 ## Introduction
 
-PS2SDK is a collecction of Open Source libraries used for developing applications on Sony's PlayStation 2® (PS2). ps2sdk contains the work from a number of PS2 projects which are now buildable in a single source tree. Review the history section for how ps2sdk came about.
+PS2SDK is a collection of Open Source libraries used for developing applications on Sony's PlayStation 2® (PS2). ps2sdk contains the work from a number of PS2 projects which are now buildable in a single source tree. Review the history section for how ps2sdk came about.
 
 At the time of writing PS2SDK includes the following libraries and features, allowing:
 
