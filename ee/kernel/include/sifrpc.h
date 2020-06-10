@@ -20,9 +20,18 @@
 #include <sifcmd.h>
 
 /* Modes for bind() and call() */
-/** Don't wait for end function */
+/** 
+ *	Mode for {@link SifBindRpc()}, {@link SifCallRpc()}, and 
+ *	{@link SifRpcGetOtherData()}. Don't wait for the end 
+ *	function to complete.
+ */
 #define SIF_RPC_M_NOWAIT	0x01
-/** Don't write back the D cache */
+
+/** 
+ *	Mode for {@link SifBindRpc()}, {@link SifCallRpc()}, and 
+ *	{@link SifRpcGetOtherData()}. Don't write back to the 
+ *	data cache.
+ */
 #define SIF_RPC_M_NOWBDC	0x02
 
 #ifdef __cplusplus
@@ -30,19 +39,28 @@ extern "C" {
 #endif
 
 typedef void * (*SifRpcFunc_t)(int fno, void *buffer, int length);
+/**
+ *	Used with {@link SifCallRpc()} as a completion handler
+ */
 typedef void (*SifRpcEndFunc_t)(void *end_param);
 
 #ifdef __cplusplus
 }
 #endif
 
+/**
+ *	Generic packet header
+ */
 typedef struct t_SifRpcPktHeader {
 	struct t_SifCmdHeader	sifcmd;
 	int			rec_id;
-	void			*pkt_addr;
+	void		*pkt_addr;
 	int			rpc_id;
 } SifRpcPktHeader_t;
 
+/**
+ *	Render Packet?
+ */
 typedef struct t_SifRpcRendPkt
 {
    struct t_SifCmdHeader	sifcmd;
@@ -57,6 +75,9 @@ typedef struct t_SifRpcRendPkt
       				*cbuff;		/* 11 */
 } SifRpcRendPkt_t;
 
+/**
+ *	Miscellaneous data packet for general purpose
+ */
 typedef struct t_SifRpcOtherDataPkt
 {
    struct t_SifCmdHeader	sifcmd;
@@ -70,6 +91,12 @@ typedef struct t_SifRpcOtherDataPkt
    int				size;		/* 10 */
 } SifRpcOtherDataPkt_t;
 
+/**
+ *	Bind packet.
+ *	Created when calling SifBindRpc(). This is a 
+ *	local struct and does not to to be created or
+ *	accessed by the user.
+ */
 typedef struct t_SifRpcBindPkt
 {
    struct t_SifCmdHeader	sifcmd;
@@ -80,6 +107,12 @@ typedef struct t_SifRpcBindPkt
    int				sid;		/* 08 */
 } SifRpcBindPkt_t;
 
+/**
+ *	Call packet.
+ *	Created when calling SifCallRpc(). This is a 
+ *	local struct and does not to to be created or
+ *	accessed by the user.
+ */
 typedef struct t_SifRpcCallPkt
 {
    struct t_SifCmdHeader	sifcmd;
@@ -95,6 +128,9 @@ typedef struct t_SifRpcCallPkt
    struct t_SifRpcServerData	*server;	/* 13 */
 } SifRpcCallPkt_t;
 
+/**
+ *	SIF server data, used to identify the server
+ */
 typedef struct t_SifRpcServerData
 {
    int				sid;		/* 04	00 */
@@ -164,34 +200,99 @@ typedef struct t_SifRpcDataQueue
 extern "C" {
 #endif
 
+/**	
+ *	Begins interface between EE and IOP
+ * 	@param mode operation mode for System Interface (currently unused, pass 0)
+ */
 void SifInitRpc(int mode);
+
+/**
+ *	Ends interface between EE and IOP
+ */
 void SifExitRpc(void);
 
 /* SIF RPC client API */
+/**
+ *	<sub>SIF RPC client API</sub><br/>
+ *	Bind/connect to a Remote Procedure Call. Used to create a relationship
+ *	with the IOP for a specified purpose to use with {@link SifCallRpc()}.
+ *	@param 	client a pointer the "client context" to create and return to
+ *			the user.
+ *	@param 	rpc_number the unique id (sid) to the Call to bind to. (TODO: parameter 
+ *			should be renamed to "sid" to avoid confusion)
+ *	@param 	mode mode of operation the packet should recieve. Current supported
+ *			values are 0x0, {@link SIF_RPC_M_NOWAIT}, and {@link SIF_RPC_M_NOWBDC}.
+ *	@return 0 if successful; -{@link E_SIF_PKT_ALLOC}, -{@link -E_SIF_PKT_SEND}, or 
+ *			-{@link E_LIB_SEMA_CREATE} on error.
+ */
 int SifBindRpc(SifRpcClientData_t *client, int rpc_number, int mode);
-int SifCallRpc(SifRpcClientData_t *client, int rpc_number, int mode,
-		void *send, int ssize, void *receive, int rsize,
-		SifRpcEndFunc_t end_function, void *end_param);
-int SifRpcGetOtherData(SifRpcReceiveData_t *rd, void *src, void *dest,
-		int size, int mode);
 
+/**
+ *	<sub>SIF RPC client API</sub><br/>
+ *	Call on a Remote Rocedure Call. Get information from the IOP.
+ *	@param 	client pointer to "client context" created by {@link SifBindRpc()}.
+ *	@param 	rpc_number special call number for the call(??).
+ *	@param 	mode mode of operation the packet should recieve. Current supported
+ *			values are 0x0, {@link SIF_RPC_M_NOWAIT}, and {@link SIF_RPC_M_NOWBDC}.
+ *	@param 	send pointer to the data to send with the call
+ *	@param 	ssize send size, or the size of the data that will be sent
+ *	@param 	receive the pointer of the data to set as a result of the call 
+ *			(TODO: spelling error! i before e people!)
+ *	@param 	rsize recieve size, or the size of the data that will be mutated
+ *	@param 	end_function {@link SifRpcEndFunc_t} called when Call is completed
+ *	@param 	end_param parameter sent to the completion function
+ *	@return 0 if successful; -{@link E_SIF_PKT_ALLOC}, -{@link E_SIF_PKT_SEND}, or
+ *			-{@link E_LIB_SEMA_CREATE} on error.
+ */
+int SifCallRpc(SifRpcClientData_t *client, int rpc_number, int mode, void *send, 
+			   int ssize, void *receive, int rsize, SifRpcEndFunc_t end_function, 
+			   void *end_param);
+
+/**
+ *	<sub>SIF RPC client API</sub><br/>
+ *	Generic call to the IOP for data.
+ *	@param 	rd pointer to a {@link SifRpcReceiveData} that contains
+ *			the information for the call
+ *	@param 	src unused. Use rd->src instead. (TODO: remove unused argument)
+ *	@param 	dest unused. Use rd->dest instead. (TODO: remove unused argument)
+ *	@param 	size unused. Use rd->size instead. (TODO: remove unused argument)
+ *	@param 	mode mode of operation the packet should recieve. Current supported
+ *			values are 0x0, {@link SIF_RPC_M_NOWAIT}, and {@link SIF_RPC_M_NOWBDC}.
+ *	@return 0 if successful; -{@link E_SIF_PKT_ALLOC}, -{@link E_SIF_PKT_SEND}, or 
+ *			-{@link E_LIB_SEMA_CREATE} on error.
+ */
+int SifRpcGetOtherData(SifRpcReceiveData_t *rd, void *src, void *dest, int size, 
+					   int mode);
+
+/**
+ *	<sub>SIF RPC client API</sub><br/>
+ *	Return header status of a {@link SifRpcClientData_t}
+ *	@param 	cd pointer to a "client context"
+ *	@return 1 if it checks out, 0 if the header is null, the header's rpc_id is not 
+ *	identical to the header packets's rpc_id, or if the header isn't allocated.
+ */
 int SifCheckStatRpc(SifRpcClientData_t *cd);
 
 /* SIF RPC server API */
-SifRpcDataQueue_t *
-SifSetRpcQueue(SifRpcDataQueue_t *q, int thread_id);
-SifRpcDataQueue_t *
-SifRemoveRpcQueue(SifRpcDataQueue_t *qd);
+/**
+ *	<sub>SIF RPC server API</sub><br/>
+ *	Add an action to the Remote Procedure Call Queue.
+ *	@param 	q pointer to data that specifies the queue information
+ *	@param 	thread_id id to set to the data's thread_id. q->thread_id = thread_id.
+ *			(TODO: kinda useless argument... let the user do this manually)
+ *	@return 
+ */
+SifRpcDataQueue_t *SifSetRpcQueue(SifRpcDataQueue_t *q, int thread_id);
 
-SifRpcServerData_t *
-SifRegisterRpc(SifRpcServerData_t *srv,
-		int sid, SifRpcFunc_t func, void *buff, SifRpcFunc_t cfunc,
-		void *cbuff, SifRpcDataQueue_t *qd);
-SifRpcServerData_t *
-SifRemoveRpc(SifRpcServerData_t *sd, SifRpcDataQueue_t *queue);
+SifRpcDataQueue_t *SifRemoveRpcQueue(SifRpcDataQueue_t *qd);
 
-SifRpcServerData_t *
-SifGetNextRequest(SifRpcDataQueue_t *qd);
+SifRpcServerData_t *SifRegisterRpc(SifRpcServerData_t *srv, int sid, SifRpcFunc_t func, 
+								   void *buff, SifRpcFunc_t cfunc, void *cbuff, 
+								   SifRpcDataQueue_t *qd);
+
+SifRpcServerData_t *SifRemoveRpc(SifRpcServerData_t *sd, SifRpcDataQueue_t *queue);
+
+SifRpcServerData_t *SifGetNextRequest(SifRpcDataQueue_t *qd);
 
 void SifExecRequest(SifRpcServerData_t *srv);
 void SifRpcLoop(SifRpcDataQueue_t *q);
