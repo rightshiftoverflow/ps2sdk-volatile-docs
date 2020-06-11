@@ -1,6 +1,6 @@
 # PS2SK Volatile Docs
 Trying to document individual functions to help new programmers at the SDK (like myself) not to be super confused.
-To view the documentation, run doxygen and go to docs/html/index.html.  
+To view the documentation, run doxygen and go to docs/html/index.html. See Documented.txt for a breakdown of progress.  
 
 NOTE: This fork is not buildable! This fork is designed to only act as a reference for documentation.
 
