@@ -144,9 +144,13 @@
 /*
  * padInfoAct cmds
  */
+/** Command for {@link padInfoAct()} ?? */
 #define PAD_ACTFUNC     1
+/** Command for {@link padInfoAct()} ?? */
 #define PAD_ACTSUB      2
+/** Command for {@link padInfoAct()} ?? */
 #define PAD_ACTSIZE     3
+/** Command for {@link padInfoAct()} ?? */
 #define PAD_ACTCURR     4
 
 /** Button info */
@@ -377,7 +381,8 @@ int padExitPressMode(int port, int slot);
  * Dunno if these need to be exported
  */
 /**
- *	Get the button mask of a specified controller
+ *	Get the button mask of a specified controller manually (user doesn't
+ *	have to use this)
  *	@param 	port port on which the slot that connects the controller is 
  *			on, usually 0
  *	@param 	slot slot of the controller, usually 0 or 1
@@ -386,10 +391,11 @@ int padExitPressMode(int port, int slot);
 int padGetButtonMask(int port, int slot);
 
 /**
- *	Get the button mask of a specified controller
+ *	Set button info manually (user doesn't have to use this)
  *	@param 	port port on which the slot that connects the controller is 
  *			on, usually 0
  *	@param 	slot slot of the controller, usually 0 or 1
+ *	@param 	buttonInfo integer button info
  *	@return 0 for unsuccessful, non-zero for successful (??)
  */
 int padSetButtonInfo(int port, int slot, int buttonInfo);
@@ -401,7 +407,9 @@ int padSetButtonInfo(int port, int slot, int buttonInfo);
  *	@param 	port port on which the slot that connects the controller is 
  *			on, usually 0
  *	@param 	slot slot of the controller, usually 0 or 1
- *	@return info on the specified controller's rumble actuators
+ *	@param 	word ??
+ *	@param 	byte command. Could be 0 or {@link PAD_ACTFUNC}
+ *	@return actuator info
  */
 unsigned char padInfoAct(int port, int slot, int word, int byte);
 
