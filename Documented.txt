@@ -1,6 +1,7 @@
 partial:
 	/ee/kernel/include/sifdma.h
 	/ee/kernel/include/loadfile.h
+	/ee/dma/include/dma.h
 
 complete (documentation done but not 100% known to be correct):
 	/ee/kernel/include/sifcmd.h

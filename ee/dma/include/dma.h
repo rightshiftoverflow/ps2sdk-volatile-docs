@@ -36,21 +36,52 @@
 extern "C" {
 #endif
 
+/**
+ *	Shuts down all dma channels
+ */
 int dma_reset(void);
 
-/** Initializes the specified dma channel. */
+/**
+ *	Initializes the specified dma channel.
+ *	@param channel 	Channel to initialize. Could be {@link DMA_CHANNEL_VIF0}
+ *	@param handler 	A "controller" handler that is triggered when certain
+ *					actions happen on the DMA
+ *	@param flags 	A bitlist of flags. Supported values are
+ *					{@link DMA_FLAG_TRANSFERTAG} and {@link DMA_FLAG_INTERRUPTSAFE}
+ *	@return -1 on fail, 0 on success
+ */
 int dma_channel_initialize(int channel, void *handler, int flags);
 
-/** Enables dma fast waits for that channel */
+/**
+ *	Enables dma fast waits for a channel
+ *	@param channel 	Channel that allows fast waits (don't know what this means yet...)
+ */
 void dma_channel_fast_waits(int channel);
 
-/** Waits until channel is usable based on coprocessor status */
+/**
+ *	Waits until channel is usable based on coprocessor status
+ */
 void dma_wait_fast(void);
 
-/** Wait until the specified dma channel is ready. */
+/**
+ *	Wait until the specified dma channel is ready
+ *	@param channel 	Channel to wait for
+ *	@param timeout 	An integer specifying how long until the the function will 
+ *					give up. You can sort of time this 
+ *	@return 0 on success, -1 if the function reached timeout
+ */
 int dma_channel_wait(int channel, int timeout);
 
-/** Send a dmachain to the specified dma channel. */
+/**
+ *	Send a dmachain to the specified dma channel.
+ *	@param channel 	Channel to send the chain to
+ *	@param data 	Data sent over the dma
+ *	@param qwc 		Length of the data
+ *	@param flags 	A bitlist of flags. Supported values are
+ *					{@link DMA_FLAG_TRANSFERTAG} and {@link DMA_FLAG_INTERRUPTSAFE}
+ *	@param spr 		??
+ *	@return always 0
+ */
 int dma_channel_send_chain(int channel, void *data, int qwc, int flags, int spr);
 
 /** Send a ucab dmachain to the specified dma channel. */
@@ -68,7 +99,13 @@ int dma_channel_receive_normal(int channel, void *data, int data_size, int flags
 /** Receive data from the specified dma channel. */
 int dma_channel_receive_chain(int channel, void *data, int data_size, int flags, int spr);
 
-/** Shut down the specified dma channel. */
+/** 
+ *	Shut down the specified dma channel.
+ *	@param channel 	Channel that will be killed
+ *	@param flags 	A bitlist of flags. Supported values are
+ *					{@link DMA_FLAG_TRANSFERTAG} and {@link DMA_FLAG_INTERRUPTSAFE}
+ *	@return always 0	
+ */
 int dma_channel_shutdown(int channel, int flags);
 
 #ifdef __cplusplus
