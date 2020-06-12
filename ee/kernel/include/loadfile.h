@@ -190,9 +190,60 @@ int SifLoadModuleBuffer(void *ptr, int arg_len, const char *args);
  */
 int SifLoadStartModuleBuffer(void *ptr, int arg_len, const char *args, int *mod_res);
 
+/**
+ *	Execute the _stop() [? don't know if this is correct] function of an IRX with a specified ID
+ *	@ingroup loadfile
+ *
+ *	@param id 		ID of the IRX module returned by a SifLoad... or similar function
+ *	@param arg_len 	Length, in bytes, of the argument list
+ *	@param args 	List of arguments to pass to the IRX on startup
+ *	@param mod_res 	Pointer to a variable that will store the return value from the IRX's _stop() [?]
+ *					function
+ *
+ *	@return The ID of the loaded module on success, or an error if the module
+ *	couldn't be stopped.
+ *
+ *	Stops the specified IRX module loaded and running on the IOP. [? arguments]. If mod_res is non-NULL,
+ *	the result code from the module's _stop() function is stored here.
+ *
+ *	@note This function does not unload the module from IOP RAM. Use {@link SifUnloadModule()}.
+ */
 int SifStopModule(int id, int arg_len, const char *args, int *mod_res);
+
+/**
+ *	Unload a specified IRX from the IOP RAM
+ *	@ingroup loadfile
+ *
+ *	@param id 		ID of the IRX module returned by a SifLoad... or similar function
+ *
+ *	@return [unknown], or an error if the module couldn't be unloaded.
+ *
+ *	@note This function does not execute the _stop() function on the IRX. Use {@link SifStopModule()}.
+ */
 int SifUnloadModule(int id);
+
+/**
+ *	Walks the currently loaded IRXs in the IOP's RAM and returns an ID for a specified
+ *	IRX's name
+ *	@ingroup loadfile
+ *
+ *	@param name 	String name of the IRX file
+ *
+ *	@return ID of the IRX, or an error if the module couldn't be found.
+ *
+ *	@note Only use if you can't keep an ID of a module you loaded or you need a module that wasn't
+ *	loaded by you
+ */
 int SifSearchModuleByName(const char *name);
+
+/**
+ *	??
+ *	@ingroup loadfile
+ *
+ *	@param ptr 		??
+ *
+ *	@return ID of the IRX, or an error if the module couldn't be found
+ */
 int SifSearchModuleByAddress(const void *ptr);
 
 /** 
