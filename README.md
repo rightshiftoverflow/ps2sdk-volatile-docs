@@ -4,7 +4,7 @@ To view the documentation, run doxygen and go to docs/html/index.html. See Docum
 
 NOTE: This fork is not buildable! This fork is designed to only act as a reference for documentation.
 
-Official [PS2SDK Documentation](https://ps2dev.github.io/ps2sdk/) (not very in-depth)
+Official [PS2SDK Documentation](https://ps2dev.github.io/ps2sdk/) (bare documentation, missing some info)  
 Unoffical [AKuHAK's Documentation](https://akuhak.github.io/ps2sdk-doxy/index.html) (info on abstracts and terminology)
 
 # PS2SDK - PS2DEV Open Source Project.
