@@ -1,4 +1,4 @@
-# PS2SK Volatile Docs
+# PS2SDK Volatile Docs
 Trying to document individual functions to help new programmers at the SDK (like myself) not to be super confused.
 To view the documentation, run doxygen and go to docs/html/index.html. See Documented.txt for a breakdown of progress.  
 
