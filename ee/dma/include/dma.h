@@ -79,12 +79,20 @@ int dma_channel_wait(int channel, int timeout);
  *	@param qwc 		Length of the data
  *	@param flags 	A bitlist of flags. Supported values are
  *					{@link DMA_FLAG_TRANSFERTAG} and {@link DMA_FLAG_INTERRUPTSAFE}
- *	@param spr 		??
+ *	@param spr 		0 or 1 indicating if the tag is located in Scratchpad RAM
  *	@return always 0
  */
 int dma_channel_send_chain(int channel, void *data, int qwc, int flags, int spr);
 
-/** Send a ucab dmachain to the specified dma channel. */
+/**
+ *	Send a Uncached Accelerated Memory (ucab) dmachain to the specified dma channel
+ *	@param channel 	Channel to send the chain to
+ *	@param data 	Data sent over the dma
+ *	@param qwc 		Length of the data
+ *	@param flags 	A bitlist of flags. Supported values are
+ *					{@link DMA_FLAG_TRANSFERTAG} and {@link DMA_FLAG_INTERRUPTSAFE}
+ *	@return always 0
+ */
 int dma_channel_send_chain_ucab(int channel, void *data, int qwc, int flags);
 
 /** Send data to the specified dma channel. */
